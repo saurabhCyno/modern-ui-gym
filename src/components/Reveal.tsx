@@ -43,10 +43,11 @@ export const Reveal: React.FC<RevealProps> = ({
   );
 };
 
-export const RevealStagger: React.FC<React.ComponentProps<typeof motion.div>> = ({
-  children,
-  ...rest
-}) => {
+export const RevealStagger: React.FC<
+  Omit<React.ComponentProps<typeof motion.div>, "children"> & {
+    children?: React.ReactNode;
+  }
+> = ({ children, ...rest }) => {
   return (
     <motion.div {...rest}>
       {React.Children.map(children, (child, index) =>
