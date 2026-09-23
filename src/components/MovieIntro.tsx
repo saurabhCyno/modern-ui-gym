@@ -9,18 +9,25 @@ const VIDEO_ID = "GsPvopOOyBs";
 export const MovieIntro: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Map the entire 160vh journey to progress so the zoom is slow and elegant.
+  // Map the entire visible journey (section top hits viewport top → section
+  // fully scrolls past) to 0..1 so the title stays fixed while the user is
+  // inside the component and only disappears as the section itself leaves.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start start", "start end"],
+    offset: ["start start", "end start"],
   });
 
-  // Heading enlarges as the user scrolls, then fades out (movie title effect).
-  const titleScale = useTransform(scrollYProgress, [0, 0.75], [1, 1.9]);
-  const titleOpacity = useTransform(scrollYProgress, [0, 0.4, 0.68], [1, 1, 0]);
+  // Heading keeps enlarging for as long as the user is inside the component,
+  // then fades out with the section as its end approaches.
+  const titleScale = useTransform(scrollYProgress, [0, 1], [1, 2.4]);
+  const titleOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.85, 1],
+    [1, 1, 0]
+  );
   const layerOpacity = useTransform(
     scrollYProgress,
-    [0, 0.55, 0.85],
+    [0, 0.7, 1],
     [1, 1, 0]
   );
   const hintOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
